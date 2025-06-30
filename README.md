@@ -10,11 +10,11 @@
 2. **iVMS 4200 Lite**  
    📹 پشتیبانی از نسخه‌های سبک‌تر  
 3. **Briton VMS**  
-   � نرم‌افزار مدیریت ویدئویی بریتون  
+   📹 نرم‌افزار مدیریت ویدئویی برایتون  
 4. **KDT VMS**  
    🔍 سیستم مدیریت ویدئویی KDT  
 5. **SmartPSS**  
-   🌐 نرم‌افزار نظارتی هوشمند  
+   🌐  نرم‌افزار نظارتی هوشمند داهوا  
 
 ---
 
@@ -72,7 +72,7 @@
 4. **KDT VMS**  
    🔍 KDT Video Surveillance System  
 5. **SmartPSS**  
-   🌐 Intelligent Surveillance Software  
+   🌐 Dahua Intelligent Surveillance Software  
 
 ---
 
