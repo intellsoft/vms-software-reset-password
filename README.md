@@ -3,6 +3,9 @@
 
 ---
 
+
+![تصویر نرم افزار ریست پسورد vms دوربین مداربسته](https://lh3.googleusercontent.com/d/13w8-gMgcClfdNK-oUTOSYwXbiL1NizNP)
+
 #### 🧩 نرم‌افزارهای پشتیبانی شده:
 1. **iVMS 4200 version 2**  
 2. **iVMS 4200 Lite**  
