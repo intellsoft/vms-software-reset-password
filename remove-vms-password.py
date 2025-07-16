@@ -1,3 +1,24 @@
+import ctypes
+import sys
+import urllib.request
+import threading
+import json
+import webbrowser
+from packaging import version
+
+# --- بررسی دسترسی Administrator ---
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+if not is_admin():
+    # اجرای مجدد برنامه با دسترسی Administrator
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+    sys.exit(0)
+
+# کد اصلی برنامه
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox, filedialog
@@ -6,6 +27,11 @@ import os
 import subprocess
 import threading
 import psutil 
+import glob
+import sqlite3
+
+# --- نسخه فعلی برنامه ---
+CURRENT_VERSION = "0.2"
 
 # --- پیکربندی نرم‌افزارها ---
 software_configs = {
@@ -29,6 +55,10 @@ software_configs = {
     "SmartPSS": {
         "keyword": "smartpss",
         "executables": ["SmartPSS.exe", "SmartPSS Client.exe", "SmartPSSClien.exe", "Configtool.exe", "PMS.exe"] 
+    },
+    "EZStation Uniview": {  # اصلاح شده: Uniaview -> Uniview
+        "keyword": "ezstation uniview",  # اصلاح شده
+        "executables": ["EZStation.exe", "Uniview.exe", "UniviewClient.exe", "EZStationClient.exe", "UniviewService.exe", "EZStationService.exe"]  # اصلاح شده
     }
 }
 
@@ -38,6 +68,32 @@ promotional_links_data = [
     {"text": "نرم افزار تبدیل عکس به فیلم تایم لپس", "url": "https://intellsoft.ir/product/time-lapse-photo-to-video/"}
 ]
 current_link_index = 0
+
+# --- توابع مربوط به بررسی آپدیت ---
+def check_for_updates():
+    """بررسی وجود نسخه جدید در GitHub"""
+    try:
+        # دریافت اطلاعات آخرین نسخه از گیت‌هاب
+        with urllib.request.urlopen("https://api.github.com/repos/intellsoft/vms-software-reset-password/releases/latest") as response:
+            data = json.loads(response.read().decode())
+            latest_version = data['tag_name']
+            
+            # مقایسه نسخه‌ها
+            if version.parse(latest_version) > version.parse(CURRENT_VERSION):
+                # نمایش پیام به کاربر
+                update_frame.pack(pady=10, fill=tk.X)
+                update_label.config(text=f"نسخه جدید {latest_version} موجود است!")
+                
+                # ذخیره URL دانلود برای استفاده در کلیک
+                global download_url
+                download_url = data['html_url']
+    except Exception as e:
+        # در صورت خطا (مثلاً عدم اتصال اینترنت) چیزی نمایش نمی‌دهیم
+        pass
+
+def download_update(event):
+    """باز کردن مرورگر برای دانلود نسخه جدید"""
+    webbrowser.open(download_url)
 
 # --- توابع مربوط به ویرایش فایل KDT ---
 def process_kdt_config_file(kdt_installation_path):
@@ -301,6 +357,75 @@ def process_briton_config_file(briton_installation_path):
     select_path_button.config(state="enabled")
     combo_box.config(state="readonly")
 
+# --- توابع مربوط به EZStation Uniview ---
+def process_ezstation_uniview(ez_installation_path):  # اصلاح شده: uniaview -> uniview
+    """
+    فایل دیتابیس ezsv*.db را در مسیر نصب EZStation Uniview پیدا کرده
+    و رمز عبور کاربر admin را تغییر می‌دهد.
+    """
+    # Process names that might hold the file
+    ez_process_names = [exe.lower() for exe in software_configs["EZStation Uniview"]["executables"]]  # اصلاح شده
+    
+    killed_processes = []
+    # Attempt to terminate EZStation processes
+    for proc in psutil.process_iter(['pid', 'name', 'exe']):
+        try:
+            if proc.info['name'] and proc.info['name'].lower() in ez_process_names:
+                # Check if the process executable is within the installation path
+                if proc.info['exe'] and ez_installation_path.lower() in proc.info['exe'].lower():
+                    result_label.config(text=f"در حال بستن پروسه: {proc.info['name']} (PID: {proc.info['pid']})...")
+                    proc.terminate() # or proc.kill() for more aggressive termination
+                    proc.wait(timeout=5) # Wait for the process to terminate
+                    killed_processes.append(proc.info['name'])
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+        except Exception as e:
+            result_label.config(text=f"خطا در بستن پروسه {proc.info['name']}: {e}")
+
+    if killed_processes:
+        result_label.config(text=f"پروسه‌های زیر بسته شدند: {', '.join(killed_processes)}\nدر حال جستجوی دیتابیس...")
+    else:
+        result_label.config(text=f"پروسه‌ای از EZStation Uniview در حال اجرا یافت نشد.\nدر حال جستجوی دیتابیس...")  # اصلاح شده
+
+    # جستجوی فایل‌های دیتابیس با الگوی ezsv*.db
+    db_files = glob.glob(os.path.join(ez_installation_path, 'ezsv*.db'))
+    
+    if not db_files:
+        result_label.config(text="هیچ فایل دیتابیس ezsv*.db پیدا نشد.")
+        select_path_button.config(state="enabled")
+        combo_box.config(state="readonly")
+        return
+
+    # انتخاب اولین فایل دیتابیس پیدا شده
+    db_path = db_files[0]
+    result_label.config(text=f"پیدا کردن دیتابیس: {db_path}\nدر حال ویرایش...")
+
+    try:
+        # اتصال به دیتابیس SQLite
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # ویرایش رمز عبور کاربر admin
+        cursor.execute("UPDATE tbl_user SET fl_user_password = ? WHERE fl_user_name = ?", 
+                      ("?XND?NN&?lN0", "admin"))
+        
+        # بررسی تعداد ردیف‌های تاثیر گرفته
+        if cursor.rowcount > 0:
+            conn.commit()
+            result_label.config(text="رمز ورود به نرم افزار 123456 با کاربر admin است")
+        else:
+            result_label.config(text="کاربر admin در دیتابیس پیدا نشد")
+        
+        conn.close()
+        
+    except sqlite3.Error as e:
+        result_label.config(text=f"خطا در ویرایش دیتابیس: {str(e)}\nنسخه نرم افزار شما پشتیبانی نمی شود. منتظر نسخه های بعدی باشید.")
+    except Exception as e:
+        result_label.config(text=f"خطای غیرمنتظره: {str(e)}")
+    
+    # دکمه‌ها را دوباره فعال کن
+    select_path_button.config(state="enabled")
+    combo_box.config(state="readonly")
 
 # --- توابع GUI ---
 def select_installation_path_and_process():
@@ -340,6 +465,8 @@ def select_installation_path_and_process():
             process_thread = threading.Thread(target=process_ivms_config, args=(folder_path, selected_software_name,), daemon=True)
         elif selected_software_name == "Briton VMS": 
             process_thread = threading.Thread(target=process_briton_config_file, args=(folder_path,), daemon=True)
+        elif selected_software_name == "EZStation Uniview":  # اصلاح شده: Uniaview -> Uniview
+            process_thread = threading.Thread(target=process_ezstation_uniview, args=(folder_path,), daemon=True)  # اصلاح شده
         else:
             result_label.config(text=f"عملیاتی برای {selected_software_name} تعریف نشده است.")
             select_path_button.config(state="enabled")
@@ -367,8 +494,23 @@ def rotate_links():
 # --- تنظیمات GUI ---
 root = tk.Tk()
 root.title("Reset VMS software password")
-root.geometry("500x400") # افزایش ارتفاع پنجره برای نمایش عناصر جدید
+root.geometry("500x450") # افزایش ارتفاع برای نمایش پیام آپدیت
 root.resizable(False, False)
+
+# فریم برای نمایش پیام آپدیت
+update_frame = ttk.Frame(root)
+update_frame.pack(pady=5, fill=tk.X)
+update_frame.pack_forget()  # ابتدا مخفی است
+
+update_label = tk.Label(
+    update_frame, 
+    text="",
+    fg="green",
+    cursor="hand2",
+    font=("B Nazanin", 10, "bold")
+)
+update_label.pack(pady=5)
+update_label.bind("<Button-1>", download_update)
 
 instruction_label = ttk.Label(root, text="نرم‌افزار مورد نظر را انتخاب کنید:")
 instruction_label.pack(pady=10)
@@ -410,5 +552,9 @@ rotating_link_label.pack(pady=5)
 
 # شروع چرخش
 rotate_links()
+
+# شروع بررسی آپدیت در پس‌زمینه
+update_thread = threading.Thread(target=check_for_updates, daemon=True)
+update_thread.start()
 
 root.mainloop()
