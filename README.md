@@ -1,22 +1,43 @@
-### نرم‌افزار ریست پسورد VMS دوربین مداربسته 🛠️  
-**ابزار حذف و بازیابی رمز عبور نرم‌افزارهای VMS دوربین مداربسته**  
+### نرم‌افزار پسورد ریست VMS 🛠️  
+**ابزار حذف و بازیابی رمز عبور نرم‌افزارهای VMS**  
+
+---
+iVMS 4200 version ریست پسورد
+
+iVMS 4200 Lite ریست پسورد
+
+Briton VMS ریست پسورد
+
+KDT VMS ریست پسورد
+
+SmartPSS ریست پسورد
+
+EZStation Uniview ریست پسورد (حذف "old version" به دلیل اشاره به نسخه)
+
+uniarch client ریست پسورد
+
+ezstation uniview ریست پسورد (حذف "new version" به دلیل اشاره به نسخه)
+
+Fara View ریست پسورد
+
+CMS H265++ XVR ریست پسورد
 
 ---
 
-
 ![تصویر نرم افزار ریست پسورد vms دوربین مداربسته](https://lh3.googleusercontent.com/d/13w8-gMgcClfdNK-oUTOSYwXbiL1NizNP)
 
-#### 🧩 نرم‌افزارهای پشتیبانی شده در آخرین نسخه 0.4:
-🎥 1. iVMS 4200 version 2
-🖥️ 2. iVMS 4200 Lite
-🇬🇧 3. Briton VMS
-🔒 4. KDT VMS
-📱 5. SmartPSS
-📼 6. EZStation Uniview old version
-🗄️ 7. uniarch client
-🆕 8. ezstation uniview new version
-👁️ 9. Fara View
-📡 10. CMS (H265++ XVR) - no name
+#### 🧩 نرم‌افزارهای پشتیبانی شده:
+🎥 1. **iVMS 4200 version 2**
+🖥️ 2. **iVMS 4200 Lite**
+🇬🇧 3. **Briton VMS**
+🔒 4. *CMS3*
+📱 5. **SmartPSS**
+📼 6. **EZStation Uniview old version**
+🗄️ 7. **uniarch client**
+🆕 8. **ezstation uniview new version**
+👁️ 9. **Fara View**
+📡 10. **CMS (H265++ XVR) - no name**
+📡 11. **IMS300**
 ---
 
 #### 🚀 راهنمای استفاده:
