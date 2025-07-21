@@ -44,7 +44,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 # --- نسخه فعلی برنامه ---
-CURRENT_VERSION = "0.4"
+CURRENT_VERSION = "0.5"
 
 # --- پیکربندی نرم‌افزارها ---
 software_configs = {
@@ -97,6 +97,16 @@ software_configs = {
         "keyword": "cms",
         "executables": ["CMS.exe", "XVR.exe", "H265++.exe", "CMSClient.exe"],
         "image": "cms-h265-plus-xvr.jpg"
+    },
+    "IMS300": {
+        "keyword": "ims300",
+        "executables": ["IMS300.exe", "IMSClient.exe", "Client.exe", "Main.exe"],
+        "image": "ims300.jpg"
+    },
+    "CMS3": {
+        "keyword": "cms3",
+        "executables": ["CMS3.exe", "CMSClient.exe", "Client.exe", "Main.exe"],
+        "image": "cms3.jpg"
     }
 }
 
@@ -547,6 +557,131 @@ def process_cms_config_file(installation_path):
         select_path_button.config(state="enabled")
         combo_box.config(state="readonly")
 
+# --- توابع جدید برای IMS300 ---
+# --- توابع جدید برای IMS300 ---
+def process_ims300_database(installation_path):
+    """پردازش دیتابیس IMS300 و تغییر رمز عبور"""
+    # جستجوی فایل دیتابیس
+    db_files = glob.glob(os.path.join(installation_path, 'db_log.db'))
+    if not db_files:
+        result_label.config(text="فایل دیتابیس db_log.db پیدا نشد.")
+        select_path_button.config(state="enabled")
+        combo_box.config(state="readonly")
+        return
+        
+    db_path = db_files[0]
+    
+    # ایجاد بکاپ قبل از تغییر
+    if not create_backup(db_path):
+        result_label.config(text="خطا در ایجاد بکاپ فایل دیتابیس")
+        select_path_button.config(state="enabled")
+        combo_box.config(state="readonly")
+        return
+        
+    # متوقف کردن فرآیندهای مرتبط
+    process_names = [exe.lower() for exe in software_configs["IMS300"]["executables"]]
+    for proc in psutil.process_iter(['pid', 'name', 'exe']):
+        try:
+            if proc.info['name'] and proc.info['name'].lower() in process_names:
+                if proc.info['exe'] and installation_path.lower() in proc.info['exe'].lower():
+                    proc.terminate()
+                    proc.wait(timeout=5)
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess, Exception):
+            pass
+            
+    try:
+        # اتصال به دیتابیس SQLite
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # بررسی وجود جدول و فیلد
+        cursor.execute("PRAGMA table_info(table_user)")
+        columns = cursor.fetchall()
+        column_names = [col[1].lower() for col in columns]
+        
+        # تعیین نام ستون‌ها بر اساس ساختار واقعی دیتابیس
+        username_col = "name"
+        password_col = "password"
+          
+        # به روزرسانی رمز عبور برای کاربر admin
+        cursor.execute(f"UPDATE table_user SET [{password_col}] = ? WHERE [{username_col}] = ?", ("123456", "admin"))
+        
+        if cursor.rowcount == 0:
+            # اگر کاربر admin پیدا نشد، سعی می‌کنیم کاربر پیش‌فرض را پیدا کنیم
+            cursor.execute(f"SELECT [{username_col}] FROM table_user LIMIT 1")
+            default_user = cursor.fetchone()
+            if default_user:
+                cursor.execute(f"UPDATE table_user SET [{password_col}] = ? WHERE [{username_col}] = ?", ("123456", default_user[0]))
+                conn.commit()
+                result_label.config(text=f"رمز عبور برای کاربر '{default_user[0]}' به 123456 تغییر یافت.")
+                show_payment_frame()
+            else:
+                result_label.config(text="هیچ کاربری در جدول table_user یافت نشد.")
+        else:
+            conn.commit()
+            result_label.config(text="رمز عبور کاربر admin به 123456 تغییر یافت.")
+            show_payment_frame()
+            
+        conn.close()
+    except Exception as e:
+        result_label.config(text=f"خطا در ویرایش دیتابیس IMS300: {e}")
+        import traceback
+        print(traceback.format_exc())
+    finally:
+        select_path_button.config(state="enabled")
+        combo_box.config(state="readonly")
+
+# --- توابع جدید برای CMS3 ---
+def process_cms3_config_file(installation_path):
+    """ویرایش فایل userinfo.xml برای CMS3"""
+    # جستجوی مسیر فایل
+    possible_paths = [
+        os.path.join(installation_path, "User", "admin", "userinfo.xml"),
+        os.path.join(installation_path, "User", "userinfo.xml"),
+        os.path.join(installation_path, "Config", "userinfo.xml"),
+        os.path.join(installation_path, "admin", "userinfo.xml")
+    ]
+    
+    found_config_path = next((p for p in possible_paths if os.path.exists(p) and os.path.isfile(p)), None)
+    if not found_config_path:
+        result_label.config(text="فایل userinfo.xml برای CMS3 پیدا نشد.")
+        select_path_button.config(state="enabled")
+        combo_box.config(state="readonly")
+        return
+
+    # ایجاد بکاپ قبل از تغییر
+    if not create_backup(found_config_path):
+        result_label.config(text="خطا در ایجاد بکاپ فایل پیکربندی")
+        select_path_button.config(state="enabled")
+        combo_box.config(state="readonly")
+        return
+        
+    # متوقف کردن فرآیندهای مرتبط
+    process_names = [exe.lower() for exe in software_configs["CMS3"]["executables"]]
+    for proc in psutil.process_iter(['pid', 'name', 'exe']):
+        try:
+            if proc.info['name'] and proc.info['name'].lower() in process_names:
+                if proc.info['exe'] and installation_path.lower() in proc.info['exe'].lower():
+                    proc.terminate()
+                    proc.wait(timeout=5)
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess, Exception):
+            pass
+            
+    try:
+        # جایگزینی محتوای فایل
+        new_content = """<Userinfo UserName="admin" PicturePath="" UserPhone="" UserPassword="566BD26F08334D98" UserID="0" UserType="1" UserPower="207" />"""
+        
+        with open(found_config_path, 'w', encoding='utf-8') as f:
+            f.write(new_content)
+            
+        result_label.config(text="رمز عبور جدید نرم افزار CMS3: 123456")
+        show_payment_frame()
+    except Exception as e:
+        result_label.config(text=f"خطا در ویرایش فایل CMS3: {e}")
+    finally:
+        select_path_button.config(state="enabled")
+        combo_box.config(state="readonly")
+
 # --- توابع اصلی برای نرم‌افزارهای با مسیر ثابت ---
 def process_uniarch_client():
     process_uniview_sqlite(r"C:\Users\Public\Uniarch Client\ezsv2.db", "uniarch client")
@@ -749,6 +884,8 @@ def select_installation_path_and_process():
             "EZStation Uniview old version": process_ezstation_old_version,
             "Fara View": process_fara_view_config_file,
             "CMS (H265++ XVR) - no name": process_cms_config_file,
+            "IMS300": process_ims300_database,
+            "CMS3": process_cms3_config_file
         }
         
         target_func = path_based_processor.get(selected_software_name)
