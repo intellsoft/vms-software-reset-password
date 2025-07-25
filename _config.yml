@@ -1,0 +1,88 @@
+# _config.yml
+
+# تنظیمات اصلی سایت
+title: نرم‌افزار بازیابی رمز عبور VMS
+description: راهنمای ساده بازیابی رمز عبور نرم‌افزارهای دوربین مداربسته
+baseurl: "" # برای توسعه محلی خالی بگذارید
+url: "https://intellsoft.github.io/vms-software-reset-password" # آدرس نهایی سایت
+lang: "fa-IR"
+direction: rtl
+timezone: Asia/Tehran
+
+# مشخصات مالک
+author:
+  name: محمدعلی عباسپور
+  email: support@intellsoft.ir
+  url: https://intellsoft.ir
+
+# تنظیمات ساخت
+markdown: kramdown
+theme: jekyll-theme-minimal
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-rtl # برای پشتیبانی از راست‌چین
+
+# تنظیمات سفارشی
+logo: /assets/images/logo.png
+support_email: support@intellsoft.ir
+default_password: "123456"
+github_repo: "https://github.com/intellsoft/vms-software-reset-password"
+
+# لیست نرم‌افزارهای پشتیبانی شده
+supported_software:
+  - name: iVMS 4200 نسخه ۲
+    icon: 🖥️
+  - name: iVMS 4200 Lite
+    icon: 💻
+  - name: Briton VMS
+    icon: 🇬🇧
+  - name: CMS3
+    icon: 🔒
+  - name: SmartPSS
+    icon: 📱
+  - name: EZStation Uniview
+    icon: 📼
+  - name: uniarch client
+    icon: 🗄️
+  - name: Fara View
+    icon: 👁️
+  - name: CMS (H265++ XVR)
+    icon: 📡
+  - name: IMS300
+    icon: 📡
+
+# تنظیمات ناوبری
+nav_links:
+  - title: صفحه اصلی
+    url: /
+  - title: راهنمای استفاده
+    url: /guide.html
+  - title: سوالات متداول
+    url: /faq.html
+  - title: دانلود
+    url: /download.html
+  - title: پشتیبانی
+    url: /support.html
+
+# تنظیمات پیشرفته
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .gitignore
+  - LICENSE
+  - README.md
+
+# تنظیمات SEO
+seo:
+  title: نرم‌افزار ریست پسورد VMS | اینتل سافت
+  description: ابزار بازیابی رمز عبور نرم‌افزارهای دوربین مداربسته iVMS, SmartPSS, EZStation و دیگر نرم‌افزارها
+  keywords: 
+    - "ریست پسورد vms"
+    - "بازیابی رمز ivms 4200"
+    - "نرم افزار reset password cctv"
+    - "بازیابی رمز smartpss"
+    - "رمز پیش فرض ezstation"
