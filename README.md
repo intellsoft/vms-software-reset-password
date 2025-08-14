@@ -2,15 +2,15 @@
 **ابزار حذف و بازیابی رمز عبور نرم‌افزارهای VMS**  
 
 ---
-![iVMS 4200 version ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%DA%86%D8%B7%D9%88%D8%B1-%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-i-vms-4200-%D8%B1%D8%A7-%D8%A7%D9%86%D8%AC%D8%A7%D9%85-%D8%AF%D9%87%D9%85%D8%9F)
+[iVMS 4200 version ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%DA%86%D8%B7%D9%88%D8%B1-%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-i-vms-4200-%D8%B1%D8%A7-%D8%A7%D9%86%D8%AC%D8%A7%D9%85-%D8%AF%D9%87%D9%85%D8%9F)
 
-![iVMS 4200 Lite ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-i-vms-4200-lite)
+[iVMS 4200 Lite ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-i-vms-4200-lite)
 
-![Briton VMS ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-briton-vms)
+[Briton VMS ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-briton-vms)
 
 KDT VMS ریست پسورد
 
-![SmartPSS ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-smart-pss)
+[SmartPSS ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-smart-pss)
 
 EZStation Uniview ریست پسورد (نسخه قدیمی)
 
@@ -20,7 +20,7 @@ ezstation uniview ریست پسورد (نسخه جدید)
 
 Fara View ریست پسورد
 
-![CMS H265++ XVR ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-cms-h-265-xvr)
+[CMS H265++ XVR ریست پسورد](https://intellsoft.ir/cctv-vms-software-reset-password-tools/#%D8%B1%DB%8C%D8%B3%D8%AA-%DA%A9%D8%B1%D8%AF%D9%86-%D8%B1%D9%85%D8%B2-%D8%B9%D8%A8%D9%88%D8%B1-cms-h-265-xvr)
 
 ---
 
